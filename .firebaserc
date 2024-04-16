@@ -1,5 +1,11 @@
 {
   "projects": {
     "default": "m3h1a-1n"
+  },
+  "targets": {},
+  "etags": {
+    "m3h1a-1n": {
+      "extensionInstances": {}
+    }
   }
 }
