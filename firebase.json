@@ -7,7 +7,7 @@
   },
   "extensions": {},
   "hosting": {
-    "public": "public",
+    "public": ".next",
     "ignore": [
       "firebase.json",
       "**/.*",
