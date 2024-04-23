@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --color-text: #000;
+  --color-background: #fff;
+}
+
+.dark {
+  --color-text: #fff;
+  --color-background: #000;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,13 +21,13 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+input {
+  color: var(--color-text);
+  background-color: var(--color-background);
 }
 
 @layer utilities {
