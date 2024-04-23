@@ -9,7 +9,7 @@ export default function Home() {
   );
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,9 +19,7 @@ export default function Home() {
   };
 
   const handleThemeChange = () => {
-    let tempTheme = Math.random() < 0.5 ? "light" : "dark";
-    console.log("Changing theme to : ", tempTheme);
-    setTheme(tempTheme);
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   useEffect(() => {
@@ -45,7 +43,7 @@ export default function Home() {
             key={index}
             className={`flex ${message.sender === "me" ? "justify-end" : ""}`}
           >
-            <div className="m-4 p-2 rounded text-black bg-gray-200 inline-block">
+            <div className="m-4 p-2 rounded text-[var(--color-text)] bg-[var(--color-background)] inline-block">
               {message.text} {message.sender}
             </div>
           </div>
