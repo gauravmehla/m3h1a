@@ -25,6 +25,11 @@ body {
   background-color: var(--color-background);
 }
 
+input {
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
