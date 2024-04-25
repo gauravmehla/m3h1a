@@ -1,4 +1,4 @@
-import "@/app/components/SuggestionsBar/SuggestionsBar.css";
+import "@/app/components/SuggestionsBar/Suggestionsbar.css";
 
 interface SuggestionsBarProps {
   suggestions: string[];
