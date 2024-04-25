@@ -2,12 +2,13 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
-import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
+import { FaGithub } from "react-icons/fa";
 import "@/app/styles/fonts.css";
 import "@/app/styles/mkdwn.css";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 import ThemeSwitcher from "@/app/components/ThemeSwitcher/ThemeSwitcher";
 import SuggestionsBar from "@/app/components/SuggestionsBar/SuggestionsBar";
 
@@ -101,13 +102,23 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen justify-between">
-      <ThemeSwitcher
-        resolvedTheme={resolvedTheme || ""}
-        handleThemeChange={handleThemeChange}
-      />
+      <div className="flex items-center justify-end topbar">
+        <ThemeSwitcher
+          resolvedTheme={resolvedTheme || ""}
+          handleThemeChange={handleThemeChange}
+        />
+        <a
+          className="p-2"
+          href="https://github.com/gauravmehla"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaGithub size={24} />
+        </a>
+      </div>
       <div className="overflow-auto p-4">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center text-2xl big-center-text">
+          <div className="flex items-center justify-center text-2xl big-center-text typewriter">
             Hi, Gaurav This side.
           </div>
         ) : (
@@ -123,7 +134,9 @@ export default function Home() {
                     : "bg-[var(--color-background)]"
                 }`}
               >
-                <ReactMarkdown>{message.prompt}</ReactMarkdown>
+                <ReactMarkdown className="react-markdown" remarkPlugins={[gfm]}>
+                  {message.prompt}
+                </ReactMarkdown>
               </div>
             </div>
           ))

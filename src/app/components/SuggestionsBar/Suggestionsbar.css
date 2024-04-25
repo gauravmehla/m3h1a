@@ -1,5 +1,6 @@
 .suggestions-container {
   display: flex;
+  justify-content: center;
   overflow-x: auto;
   gap: 10px;
   padding: 10px 0;
