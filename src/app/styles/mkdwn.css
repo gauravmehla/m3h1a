@@ -1,29 +1,80 @@
 h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
-  }
-  
-  h2 {
-    font-size: 1.5em;
-    margin: 0.83em 0;
-  }
-  
-  h3 {
-    font-size: 1.17em;
-    margin: 1em 0;
-  }
-  
-  h4 {
-    font-size: 1em;
-    margin: 1.33em 0;
-  }
-  
-  h5 {
-    font-size: 0.83em;
-    margin: 1.67em 0;
-  }
-  
-  h6 {
-    font-size: 0.67em;
-    margin: 2.33em 0;
-  }
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0;
+}
+
+h3 {
+  font-size: 1.17em;
+  margin: 1em 0;
+}
+
+h4 {
+  font-size: 1em;
+  margin: 1.33em 0;
+}
+
+h5 {
+  font-size: 0.83em;
+  margin: 1.67em 0;
+}
+
+h6 {
+  font-size: 0.67em;
+  margin: 2.33em 0;
+}
+
+.react-markdown h1,
+.react-markdown h2,
+.react-markdown h3,
+.react-markdown h4,
+.react-markdown h5,
+.react-markdown h6 {
+  color: var(--color-text);
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.react-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.react-markdown th,
+.react-markdown td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.react-markdown th {
+  text-align: left;
+}
+
+.react-markdown p {
+  text-align: justify;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+.react-markdown code {
+  display: block;
+  white-space: pre-wrap;
+}
+
+.react-markdown ul {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  list-style: disc outside none;
+}
+
+.react-markdown ul li {
+  margin-left: 2em;
+  display: list-item;
+  text-align: -webkit-match-parent;
+}

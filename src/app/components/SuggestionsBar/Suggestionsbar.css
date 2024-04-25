@@ -1,0 +1,15 @@
+.suggestions-container {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.suggestion {
+  flex: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}

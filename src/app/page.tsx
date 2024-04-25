@@ -1,13 +1,16 @@
 "use client";
-
+import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
-import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
+import { FaGithub } from "react-icons/fa";
 import "@/app/styles/fonts.css";
 import "@/app/styles/mkdwn.css";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
 import { db } from "@/app/firebase";
 import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
+import ThemeSwitcher from "@/app/components/ThemeSwitcher/ThemeSwitcher";
+import SuggestionsBar from "@/app/components/SuggestionsBar/SuggestionsBar";
 
 export default function Home() {
   const [messages, setMessages] = useState<
@@ -19,8 +22,23 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [rplyWaiting, setRplyWaiting] = useState(false);
 
-  const handleSend = async (e: React.FormEvent) => {
+  const suggestions: string[] = [
+    "Tell me about yourself?",
+    "Share your resume.",
+    "What is the answer to the ultimate question of life, the universe, and everything",
+  ];
+
+  const handleSuggestionClick = (suggestion: string) => {
+    insertMessage({ sender: "me", prompt: suggestion });
+  };
+
+  const handleSend = (e: React.FormEvent, message?: string) => {
     e.preventDefault();
+
+    const messageToSend = input || message;
+    if (!messageToSend) {
+      return;
+    }
 
     if (messages.length >= 10) {
       alert(
@@ -29,14 +47,16 @@ export default function Home() {
       return;
     }
 
+    insertMessage({ sender: "me", prompt: messageToSend });
+    setInput("");
+  };
+
+  const insertMessage = async (doc: { sender: string; prompt: string }) => {
     try {
       const generateRef = collection(db, "generate");
-      const docRef = await addDoc(generateRef, { sender: "me", prompt: input });
+      const docRef = await addDoc(generateRef, doc);
       console.log("Document successfully written!");
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "me", prompt: input },
-      ]);
+      setMessages((prevMessages) => [...prevMessages, doc]);
       setRplyWaiting(true);
 
       const unSub = onSnapshot(docRef, (doc) => {
@@ -59,8 +79,6 @@ export default function Home() {
     } catch (error) {
       console.error("Error writing document: ", error);
     }
-
-    setInput("");
   };
 
   const handleThemeChange = () => {
@@ -84,22 +102,23 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen justify-between">
-      <button
-        onClick={handleThemeChange}
-        className="self-end m-4 p-2 bg-blue-500 text-white rounded flex items-center"
-      >
-        {resolvedTheme === "dark" ? (
-          <MdOutlineLightMode key="light" />
-        ) : (
-          <MdOutlineDarkMode key="dark" />
-        )}
-        <span className="ml-2">
-          {resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}
-        </span>
-      </button>
+      <div className="flex items-center justify-end topbar">
+        <ThemeSwitcher
+          resolvedTheme={resolvedTheme || ""}
+          handleThemeChange={handleThemeChange}
+        />
+        <a
+          className="p-2"
+          href="https://github.com/gauravmehla"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaGithub size={24} />
+        </a>
+      </div>
       <div className="overflow-auto p-4">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-screen text-2xl big-center-text">
+          <div className="flex items-center justify-center text-2xl big-center-text typewriter">
             Hi, Gaurav This side.
           </div>
         ) : (
@@ -115,7 +134,9 @@ export default function Home() {
                     : "bg-[var(--color-background)]"
                 }`}
               >
-                <ReactMarkdown>{message.prompt}</ReactMarkdown>
+                <ReactMarkdown className="react-markdown" remarkPlugins={[gfm]}>
+                  {message.prompt}
+                </ReactMarkdown>
               </div>
             </div>
           ))
@@ -128,34 +149,40 @@ export default function Home() {
 
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSend} className="m-2 flex px-10 items-center">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-grow p-2 border rounded text-[var(--color-text)]"
-          placeholder="What you want to know about me?"
+      <div className="flex flex-col">
+        <SuggestionsBar
+          suggestions={suggestions}
+          handleSuggestionClick={handleSuggestionClick}
         />
-        <button
-          type="submit"
-          className="ml-2 flex-shrink-0 p-2 bg-blue-500 text-white rounded"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="h-6 w-6"
+        <form onSubmit={handleSend} className="m-2 flex px-10 items-center">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-grow p-2 border rounded text-[var(--color-text)]"
+            placeholder="What you want to know about me?"
+          />
+          <button
+            type="submit"
+            className="ml-2 flex-shrink-0 p-2 bg-blue-500 text-white rounded"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-            />
-          </svg>
-        </button>
-      </form>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
