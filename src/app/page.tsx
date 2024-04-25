@@ -22,10 +22,8 @@ export default function Home() {
   const [rplyWaiting, setRplyWaiting] = useState(false);
 
   const suggestions: string[] = [
-    "What is the meaning of life?",
-    "Tell me a joke",
-    "What is the capital of France?",
-    "What is the airspeed velocity of an unladen swallow?",
+    "Tell me about yourself?",
+    "Share your resume.",
     "What is the answer to the ultimate question of life, the universe, and everything",
   ];
 
