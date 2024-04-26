@@ -11,25 +11,30 @@ import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 import ThemeSwitcher from "@/app/components/ThemeSwitcher/ThemeSwitcher";
 import SuggestionsBar from "@/app/components/SuggestionsBar/SuggestionsBar";
+import { v4 as uuidv4 } from "uuid";
+
+interface Message {
+  sender: string;
+  prompt: string;
+  aiConversationId: string;
+}
 
 export default function Home() {
-  const [messages, setMessages] = useState<
-    { sender: string; prompt: string }[]
-  >([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [rplyWaiting, setRplyWaiting] = useState(false);
-
+  const aiConversationId = uuidv4();
   const suggestions: string[] = [
     "Tell me about yourself?",
     "Share your resume.",
-    "What is the answer to the ultimate question of life, the universe, and everything",
+    "Tell me more about your experience?",
   ];
 
   const handleSuggestionClick = (suggestion: string) => {
-    insertMessage({ sender: "me", prompt: suggestion });
+    insertMessage({ sender: "me", prompt: suggestion, aiConversationId });
   };
 
   const handleSend = (e: React.FormEvent, message?: string) => {
@@ -47,11 +52,11 @@ export default function Home() {
       return;
     }
 
-    insertMessage({ sender: "me", prompt: messageToSend });
+    insertMessage({ sender: "me", prompt: messageToSend, aiConversationId });
     setInput("");
   };
 
-  const insertMessage = async (doc: { sender: string; prompt: string }) => {
+  const insertMessage = async (doc: Message) => {
     try {
       const generateRef = collection(db, "generate");
       const docRef = await addDoc(generateRef, doc);
@@ -65,13 +70,21 @@ export default function Home() {
         if (res.status?.state === "COMPLETED") {
           setMessages((prevMessages) => [
             ...prevMessages,
-            { sender: "other", prompt: res.response },
+            {
+              sender: "other",
+              prompt: res.response,
+              aiConversationId: res.aiConversationId,
+            },
           ]);
           setRplyWaiting(false);
         } else if (res.status?.state === "ERROR") {
           setMessages((prevMessages) => [
             ...prevMessages,
-            { sender: "other", prompt: "I am sorry, please try again." },
+            {
+              sender: "other",
+              prompt: "I am sorry, please try again.",
+              aiConversationId: res.aiConversationId,
+            },
           ]);
           setRplyWaiting(false);
         }
