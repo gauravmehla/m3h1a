@@ -132,7 +132,7 @@ export default function Home() {
       <div className="overflow-auto p-4">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center text-2xl big-center-text typewriter">
-            Hi, Gaurav This side.
+            Hi, gauravmehla This side. 👋
           </div>
         ) : (
           messages.map((message, index) => (
