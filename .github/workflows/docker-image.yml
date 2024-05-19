@@ -17,6 +17,8 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Build the Docker image
-        run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/m3h1a --file Dockerfile --tag m3h1a:$(date +%s)
+        run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/m3h1a:latest -t ${{ secrets.DOCKER_HUB_USERNAME }}/m3h1a:${{ github.sha }} --file Dockerfile
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/m3h1a
+        run: |
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/m3h1a:latest
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/m3h1a:${{ github.sha }}
